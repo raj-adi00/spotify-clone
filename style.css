@@ -1,0 +1,53 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: "Roboto";
+}
+
+body {
+    /* background-color: black;
+    color: white; */
+}
+
+.left {
+    width: 25vw;
+}
+
+.right {
+    width: 75vw;
+}
+
+.tools li {
+    list-style: none;
+    height: 1.5vw;
+    gap: 12px;
+}
+
+.home {
+    margin: 8px;
+    padding: 7px 12px;
+    font-weight: 700;
+}
+
+.head-library {
+    height: 1.5vw;
+    gap: 12px;
+    font-weight: 700;
+}
+
+.library {
+    padding: 7px 12px;
+    min-height: 75vh;
+}
+
+.footer {
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.footer a {
+    color: gray;
+    text-decoration: none;
+    margin: 0 6px;
+}
