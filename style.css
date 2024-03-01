@@ -117,6 +117,7 @@ body {
 /*  */
 .spotify-cards {
     margin-top: 15px;
+    flex-wrap: wrap;
 }
 
 .play-button {
