@@ -16,6 +16,7 @@ body {
 
 .right {
     width: 75vw;
+    /*  background-color: #1e1e1e; */
 }
 
 .tools li {
@@ -38,16 +39,136 @@ body {
 
 .library {
     padding: 7px 12px;
-    min-height: 75vh;
+    min-height: calc(100vh - 21vh);
 }
 
 .footer {
     font-size: 14px;
     flex-wrap: wrap;
+    position: absolute;
+    bottom: 1vw;
 }
 
 .footer a {
     color: gray;
     text-decoration: none;
     margin: 0 6px;
+}
+
+.nav img {
+    filter: invert(1);
+    margin: 0.8vw;
+}
+
+.header {
+    justify-content: space-between;
+    background-color: #121212;
+    align-items: center;
+    position: sticky;
+    margin: 1vw;
+    margin-bottom: 1px;
+}
+
+.btn {
+    margin: 0.8vw 2vw;
+    color: white;
+    background-color: #121212;
+    border: none;
+    font-size: 16px;
+    font-family: "Roboto";
+    font-weight: 700;
+}
+
+.login {
+    background-color: white;
+    color: black;
+    border-radius: 23px;
+    padding: 1vw;
+    width: 8vw;
+    min-width: 4vw;
+}
+
+.spotify-playlist {
+    margin-top: 10px;
+    background-color: #42424279;
+    height: calc(100vh - 13vh);
+    margin: 1vw;
+    margin-top: 1px;
+    padding: 1vw;
+}
+
+.spotify-playlist h2 {
+    color: white;
+    font-weight: 500;
+    font-family: "Roboto";
+}
+
+.top {
+    justify-content: space-between;
+}
+
+.top button {
+    color: rgb(152, 148, 148);
+    background-color: inherit;
+    border: none;
+    font-family: "Roboto";
+}
+
+/*  */
+.spotify-cards {
+    margin-top: 15px;
+}
+
+.play-button {
+    position: absolute;
+    right: 6%;
+    top: 54%;
+    background-color: green;
+    width: 40px;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 1s ease-out;
+}
+
+.play-button img {
+    height: 20px;
+    width: 20px;
+
+}
+
+.move {
+    position: absolute;
+    left: 0;
+}
+
+.cards {
+    width: 16vw;
+    font-weight: 300;
+    font-size: 0.8rem;
+    background-color: #181818;
+    padding: 15px 10px;
+    border-radius: 13px;
+    min-width: 140px;
+    max-width: 210px;
+    margin: 2px 15px;
+    position: relative;
+}
+
+.cards img {
+    width: calc(16vw - 20px);
+    min-width: 120px;
+    max-width: 190px;
+}
+
+.cards h3 {
+    color: white;
+    font-family: "Roboto";
+    margin: 5px;
+}
+
+.cards p {
+    color: white;
 }
