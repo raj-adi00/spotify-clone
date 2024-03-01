@@ -122,7 +122,8 @@ body {
 .play-button {
     position: absolute;
     right: 6%;
-    top: 54%;
+    /* top: 54%;change top position in js to make it responsive by getting clientrectx and change top as difference of height */
+    bottom: 25%;
     background-color: green;
     width: 40px;
     justify-content: center;
@@ -130,7 +131,7 @@ body {
     height: 40px;
     border-radius: 50%;
     opacity: 0;
-    transition: all 1s ease-out;
+    transition: all 0.5s ease-out;
 }
 
 .play-button img {
