@@ -78,7 +78,17 @@ body {
     font-family: "Roboto";
     font-weight: 700;
 }
-
+.login:hover{
+    background-color: rgba(116, 114, 114, 0.203);
+    color: white;
+    cursor: pointer;
+    transform: scale(1.2);
+}
+.signup:hover{
+    cursor: pointer;
+    transform: scale(1.2);
+    color:  rgb(152, 149, 149);
+}
 .login {
     background-color: white;
     color: black;
@@ -118,6 +128,19 @@ body {
 .spotify-cards {
     margin-top: 15px;
     flex-wrap: wrap;
+    max-height: 35vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    row-gap: 3rem;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(89, 87, 87, 0.452);
+    border-radius: 100px;
 }
 
 .play-button {
