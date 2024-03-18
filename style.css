@@ -42,7 +42,12 @@ body {
     padding: 7px 12px;
     min-height: calc(100vh - 21vh);
 }
-
+.songlist ul{
+   padding: 0 10px;
+}
+.songlist ul li{
+    list-style-type: decimal;
+}
 .footer {
     font-size: 14px;
     flex-wrap: wrap;
