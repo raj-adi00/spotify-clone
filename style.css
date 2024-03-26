@@ -33,23 +33,37 @@
     height: 1.5vw;
     gap: 12px;
     font-weight: 700;
+    margin-bottom: 10px;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 .library {
     padding: 7px 12px;
     min-height: calc(100vh - 21vh);
 }
-.songlist ul{
-   padding: 0 10px;
+
+.songlist {
+    height: 68vh;
+    overflow: auto;
+    margin-bottom: 10px;
 }
-.songlist ul li{
+
+.songlist ul li {
     list-style-type: decimal;
     margin: 12px 0px;
     border: 2px solid black;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
 }
-.library-play-now{
+
+.library-play-now {
     font-size: 12px;
 }
+
 .footer {
     font-size: 14px;
     flex-wrap: wrap;
@@ -86,17 +100,20 @@
     font-family: "Roboto";
     font-weight: 700;
 }
-.login:hover{
+
+.login:hover {
     background-color: rgba(116, 114, 114, 0.203);
     color: white;
     cursor: pointer;
     transform: scale(1.2);
 }
-.signup:hover{
+
+.signup:hover {
     cursor: pointer;
     transform: scale(1.2);
-    color:  rgb(152, 149, 149);
+    color: rgb(152, 149, 149);
 }
+
 .login {
     background-color: white;
     color: black;
@@ -207,19 +224,46 @@
     color: white;
 }
 
-.playbar{
+.playbar {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgb(11, 11, 11);
+    background: rgba(7, 0, 0, 0.618);
+    backdrop-filter: invert(1);
+    width: 72vw;
+    left: 1vw;
+    bottom: 13px;
     padding: 15px;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 90px;
 }
-.song-navigate{
+
+.song-navigate {
     gap: 4vw;
     filter: invert(1);
+    margin-bottom: 10px;
 }
-.song-navigate img:hover{
+
+.song-navigate img:hover {
     cursor: pointer;
+}
+
+.seekbar {
+    height: 5px;
+    width: 90%;
+    background-color: white;
+    border-radius: 100px;
+    margin: auto;
+    position: absolute;
+    bottom: 3px;
+    margin-bottom: 3px;
+}
+
+.circle {
+    background-color: rgb(207, 200, 200);
+    width: 13px;
+    height: 13px;
+    border-radius: 100%;
+    position: relative;
+    bottom: 4px;
+    left: 0%;
 }
