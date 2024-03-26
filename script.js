@@ -5,10 +5,19 @@ const playMusic = (track, clicked) => {
     if (currentplayed != clicked) {
         audio = new Audio(track);
         audio.play();
+        document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
+        document.getElementById(`img${clicked}`).setAttribute("src", "images&logo/pause.svg");
+        if (currentplayed >= 0) {
+            document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/play.svg");
+            // console.log(currentplayed);
+        }
         currentplayed = clicked;
     }
     else {
-        currentplayed = -100;
+        if (currentplayed >= 0)
+            document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/play.svg");
+        document.getElementById("play").setAttribute("src", "images&logo/play.svg");
+        currentplayed = -1000 + currentplayed;
     }
 }
 
@@ -54,10 +63,9 @@ async function main() {
                               </div>
                               </div>
                               <div class="flex pointer library-play-now" style="gap:4px; align-items:center">
-                              <img src="images&logo/play.svg" style="padding:0 3px;">
+                              <img src="images&logo/play.svg" style="padding:0 3px;" id="img${index - 1}">
                               </div>
                             </li>`;
-
     }
     let songli = document.querySelectorAll(".songlist li");
     // console.log(songs);
@@ -70,5 +78,53 @@ async function main() {
             playMusic(songs[parseInt(music.querySelector(".info").id)], parseInt(music.querySelector(".info").id));
         });
     }
+    document.getElementById("play").addEventListener("click", () => {
+        if (audio != undefined && currentplayed < 0) {
+            audio.play();
+            currentplayed += 1000;
+            document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
+            document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/pause.svg");
+        }
+        else if (currentplayed == undefined) {
+            audio = new Audio(songs[0]);
+            audio.play();
+            currentplayed = 0;
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
+            document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
+            document.getElementById("img0").setAttribute("src", "images&logo/pause.svg")
+        }
+        else {
+            audio.pause();
+            document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/play.svg")
+            currentplayed -= 1000;
+            document.getElementById("play").setAttribute("src", "images&logo/play.svg");
+        }
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+        if (currentplayed == undefined) {
+            currentplayed = -1000;
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
+            audio = new Audio(songs[0]);
+        }
+        else if (currentplayed < 0) {
+            if (currentplayed + 1000 == songs.length - 1)
+                currentplayed = -1000;
+            else
+                currentplayed++;
+            audio = new Audio(songs[currentplayed + 1000]);
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed+1000].querySelector(".info").textContent;
+        }
+        else if (currentplayed == songli.length - 1) {
+            playMusic(songs[0], 0);
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
+        }
+        else {
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1].querySelector(".info").textContent;
+            playMusic(songs[currentplayed + 1], currentplayed + 1);
+        }
+    });
+
+
 }
 main();
