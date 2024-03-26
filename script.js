@@ -113,7 +113,7 @@ async function main() {
             else
                 currentplayed++;
             audio = new Audio(songs[currentplayed + 1000]);
-            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed+1000].querySelector(".info").textContent;
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
         }
         else if (currentplayed == songli.length - 1) {
             playMusic(songs[0], 0);
@@ -125,6 +125,29 @@ async function main() {
         }
     });
 
+    document.getElementById("previous").addEventListener("click", () => {
+        if (currentplayed == undefined) {
+            currentplayed = -1000 + songs.length - 1;
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
+            audio = new Audio(songs[currentplayed + 1000]);
+        }
+        else if (currentplayed < 0) {
+            if (currentplayed + 1000 == 0)
+                currentplayed = -1000 + songs.length - 1;
+            else
+                currentplayed--;
+            audio = new Audio(songs[currentplayed + 1000]);
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
+        }
+        else if (currentplayed == 0) {
+            playMusic(songs[songs.length - 1], songs.length - 1);
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[songs.length - 1].querySelector(".info").textContent;
+        }
+        else {
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed - 1].querySelector(".info").textContent;
+            playMusic(songs[currentplayed - 1], currentplayed - 1);
+        }
+    });
 
 }
 main();
