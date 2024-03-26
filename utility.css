@@ -32,3 +32,11 @@
 .library{
     margin: 8px;
 }
+.space{
+    column-gap: 1rem;
+    align-items: center;
+    cursor: pointer;
+}
+.pointer{
+    cursor: pointer;
+}

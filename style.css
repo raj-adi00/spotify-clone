@@ -5,10 +5,7 @@
     font-family: "Roboto";
 }
 
-body {
-    /* background-color: black;
-    color: white; */
-}
+
 
 .left {
     width: 25vw;
@@ -47,6 +44,11 @@ body {
 }
 .songlist ul li{
     list-style-type: decimal;
+    margin: 12px 0px;
+    border: 2px solid black;
+}
+.library-play-now{
+    font-size: 12px;
 }
 .footer {
     font-size: 14px;

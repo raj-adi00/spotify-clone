@@ -26,10 +26,22 @@ async function main() {
         song = song.split('/song/')[1];
         song = song.substring(0, song.length - 4);
         song = song.replaceAll("%20", " ");
-        songul.innerHTML += `<li>${song}`;
+        songul.innerHTML += `<li class="flex" style="align-itmes:center; justify-content:space-between; background:#f8f8f87a; padding:5px">
+                              <div class="musiclist flex space">
+                              <img src="images&logo/music.svg" alt="">
+                              <div>
+                                <div>${song}</div>
+                                <div>Artist</div>
+                              </div>
+                              </div>
+                              <div class="flex pointer library-play-now" style="gap:4px; align-items:center">
+                              Play Now
+                              <img src="images&logo/play.svg">
+                              </div>
+                            </li>`;
     }
     var audio = new Audio(songs[0]);
-    audio.play();
+    // audio.play();
     audio.addEventListener("loadeddata", () => {
         console.log(audio.duration, audio.currentSrc, audio.currentTime);
     });
