@@ -17,13 +17,13 @@ function songend() {
             currentplayed = 0;
         else
             currentplayed++;
-            audio = new Audio(songs[currentplayed]);
-            audio.play();
+        audio = new Audio(songs[currentplayed]);
+        audio.play();
         startfrombegin();
         initiailtime();
         document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/pause.svg");
-        let clicked=currentplayed;
-        audio.addEventListener("timeupdate",()=>{
+        let clicked = currentplayed;
+        audio.addEventListener("timeupdate", () => {
             moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
         })
@@ -41,7 +41,6 @@ function moveseekbar(clicked) {
     let percent = (audio.currentTime / audio.duration) * 100;
     console.log(percent);
     if (currentplayed == clicked) {
-        // document.querySelector(".covered").style.width=`${percent < 100 ? percent : 100}%`;
         document.querySelector(".circle").style.left = `${percent < 99 ? percent : 99}%`;
     }
 }
@@ -264,6 +263,16 @@ async function main() {
             initiailtime();
         }
         startfrombegin();
+    });
+    document.querySelector(".seekbar").addEventListener("click", (e) => {
+        // console.log(e.clientX - document.querySelector(".seekbar").getBoundingClientRect().left);
+        document.querySelector(".circle").style.left = `${e.clientX - document.querySelector(".seekbar").getBoundingClientRect().left}px`;
+        let percent = ((e.clientX - document.querySelector(".seekbar").getBoundingClientRect().left) / (document.querySelector(".seekbar").getBoundingClientRect().right - document.querySelector(".seekbar").getBoundingClientRect().left));
+        percent = percent * 100;
+        percent = Math.trunc(percent);
+        audio.pause();
+        audio.currentTime = (percent * audio.duration) / 100;
+        audio.play();
     });
 }
 main();
