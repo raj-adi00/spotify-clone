@@ -286,3 +286,7 @@
     font-size: 1.2rem;
     font-stretch: extra-expanded;
 }
+.covered{
+    background-color: black;
+    height: 100%;
+}

@@ -8,23 +8,53 @@ function convertSecondsToMinutesAndSeconds(seconds) {
     var formattedTime = minutes + ":" + Math.floor(((remainingSeconds < 10 ? "0" : "") + remainingSeconds));
     return formattedTime;
 }
+function songend() {
+
+    if (audio.currentTime == audio.duration) {
+        audio.pause();
+        document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/play.svg");
+        if (currentplayed == songs.length - 1)
+            currentplayed = 0;
+        else
+            currentplayed++;
+            audio = new Audio(songs[currentplayed]);
+            audio.play();
+        startfrombegin();
+        initiailtime();
+        document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/pause.svg");
+        let clicked=currentplayed;
+        audio.addEventListener("timeupdate",()=>{
+            moveseekbar(clicked);
+            document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
+        })
+    }
+}
 function displaysongtime(formattedcurrenttime, formattedduration) {
     document.querySelector(".songtime").innerHTML = `${formattedcurrenttime}/${formattedduration}`;
 }
-function initiailtime()
-{
-    audio.addEventListener("loadeddata",()=>{
+function initiailtime() {
+    audio.addEventListener("loadeddata", () => {
         displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
     });
 }
-function moveseekbar() {
-
+function moveseekbar(clicked) {
+    let percent = (audio.currentTime / audio.duration) * 100;
+    console.log(percent);
+    if (currentplayed == clicked) {
+        // document.querySelector(".covered").style.width=`${percent < 100 ? percent : 100}%`;
+        document.querySelector(".circle").style.left = `${percent < 99 ? percent : 99}%`;
+    }
+}
+function startfrombegin() {
+    document.querySelector(".circle").style.left = "0%";
+    document.querySelector(".circle").style.transition = "all 0s";
 }
 let audio = new Audio();
 let currentplayed;
 const playMusic = (track, clicked) => {
     audio.pause();
     if (currentplayed != clicked) {
+        document.querySelector(".circle").style.left = "0%";
         audio = new Audio(track);
         audio.play();
         document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
@@ -35,8 +65,11 @@ const playMusic = (track, clicked) => {
         }
         currentplayed = clicked;
         initiailtime();
+        // startfrombegin();
         audio.addEventListener("timeupdate", () => {
+            moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
+            songend();
         });
     }
     else {
@@ -45,8 +78,11 @@ const playMusic = (track, clicked) => {
         document.getElementById("play").setAttribute("src", "images&logo/play.svg");
         currentplayed = -1000 + currentplayed;
         initiailtime();
+        // startfrombegin();
         audio.addEventListener("timeupdate", () => {
+            moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
+            songend();
         });
     }
 }
@@ -115,8 +151,11 @@ async function main() {
             document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
             document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/pause.svg");
             initiailtime();
+            let clicked = currentplayed;
             audio.addEventListener("timeupdate", () => {
+                moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
         else if (currentplayed == undefined) {
@@ -128,7 +167,9 @@ async function main() {
             document.getElementById("img0").setAttribute("src", "images&logo/pause.svg");
             initiailtime();
             audio.addEventListener("timeupdate", () => {
+                moveseekbar(0);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
         else {
@@ -138,7 +179,9 @@ async function main() {
             document.getElementById("play").setAttribute("src", "images&logo/play.svg");
             initiailtime();
             audio.addEventListener("timeupdate", () => {
+                moveseekbar();
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
     });
@@ -148,9 +191,12 @@ async function main() {
             currentplayed = -1000;
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
             audio = new Audio(songs[0]);
-          initiailtime();
+            initiailtime();
+            let clicked = currentplayed;
             audio.addEventListener("timeupdate", () => {
+                moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
         else if (currentplayed < 0) {
@@ -162,8 +208,11 @@ async function main() {
             audio = new Audio(songs[currentplayed + 1000]);
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
             initiailtime();
+            let clicked = currentplayed;
             audio.addEventListener("timeupdate", () => {
+                moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
         else if (currentplayed == songli.length - 1) {
@@ -175,6 +224,7 @@ async function main() {
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1].querySelector(".info").textContent;
             playMusic(songs[currentplayed + 1], currentplayed + 1);
         }
+        startfrombegin();
     });
 
     document.getElementById("previous").addEventListener("click", () => {
@@ -184,7 +234,9 @@ async function main() {
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
             initiailtime();
             audio.addEventListener("timeupdate", () => {
-                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                moveseekbar();
+                displaysongtime(convertSecondToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
         else if (currentplayed < 0) {
@@ -196,7 +248,9 @@ async function main() {
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
             initiailtime();
             audio.addEventListener("timeupdate", () => {
+                moveseekbar();
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+                songend();
             });
         }
         else if (currentplayed == 0) {
@@ -209,6 +263,7 @@ async function main() {
             playMusic(songs[currentplayed - 1], currentplayed - 1);
             initiailtime();
         }
+        startfrombegin();
     });
 }
 main();
