@@ -270,13 +270,19 @@
     left: 0%;
 }
 
-.songname {
+.abovebar {
     height: 20px;
     color: white;
     position: absolute;
-    top: 3px;
-    font-weight: 700;
-    font-stretch: extra-expanded;
-    font-size: 1.2rem;
+    top: 20px; 
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: auto;
     /* margin-bottom: 10px; */
+}
+.songname{
+    font-weight: 700;
+    font-size: 1.2rem;
+    font-stretch: extra-expanded;
 }

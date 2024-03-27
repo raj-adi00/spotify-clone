@@ -1,3 +1,25 @@
+function convertSecondsToMinutesAndSeconds(seconds) {
+    var minutes = Math.floor(seconds / 60);
+    var remainingSeconds = seconds % 60;
+    if (isNaN(minutes))
+        minutes = 0;
+    if (isNaN(remainingSeconds))
+        remainingSeconds = 0;
+    var formattedTime = minutes + ":" + Math.floor(((remainingSeconds < 10 ? "0" : "") + remainingSeconds));
+    return formattedTime;
+}
+function displaysongtime(formattedcurrenttime, formattedduration) {
+    document.querySelector(".songtime").innerHTML = `${formattedcurrenttime}/${formattedduration}`;
+}
+function initiailtime()
+{
+    audio.addEventListener("loadeddata",()=>{
+        displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+    });
+}
+function moveseekbar() {
+
+}
 let audio = new Audio();
 let currentplayed;
 const playMusic = (track, clicked) => {
@@ -12,12 +34,20 @@ const playMusic = (track, clicked) => {
             // console.log(currentplayed);
         }
         currentplayed = clicked;
+        initiailtime();
+        audio.addEventListener("timeupdate", () => {
+            document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
+        });
     }
     else {
         if (currentplayed >= 0)
             document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/play.svg");
         document.getElementById("play").setAttribute("src", "images&logo/play.svg");
         currentplayed = -1000 + currentplayed;
+        initiailtime();
+        audio.addEventListener("timeupdate", () => {
+            document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
+        });
     }
 }
 
@@ -84,6 +114,10 @@ async function main() {
             currentplayed += 1000;
             document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
             document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/pause.svg");
+            initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
         else if (currentplayed == undefined) {
             audio = new Audio(songs[0]);
@@ -91,13 +125,21 @@ async function main() {
             currentplayed = 0;
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
             document.getElementById("play").setAttribute("src", "images&logo/pause.svg");
-            document.getElementById("img0").setAttribute("src", "images&logo/pause.svg")
+            document.getElementById("img0").setAttribute("src", "images&logo/pause.svg");
+            initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
         else {
             audio.pause();
             document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/play.svg")
             currentplayed -= 1000;
             document.getElementById("play").setAttribute("src", "images&logo/play.svg");
+            initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
     });
 
@@ -106,16 +148,26 @@ async function main() {
             currentplayed = -1000;
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
             audio = new Audio(songs[0]);
+          initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
         else if (currentplayed < 0) {
-            if (currentplayed + 1000 == songs.length - 1)
+            if (currentplayed + 1000 == songs.length - 1) {
                 currentplayed = -1000;
+            }
             else
                 currentplayed++;
             audio = new Audio(songs[currentplayed + 1000]);
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
+            initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
         else if (currentplayed == songli.length - 1) {
+            initiailtime();
             playMusic(songs[0], 0);
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[0].querySelector(".info").textContent;
         }
@@ -128,8 +180,12 @@ async function main() {
     document.getElementById("previous").addEventListener("click", () => {
         if (currentplayed == undefined) {
             currentplayed = -1000 + songs.length - 1;
-            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
             audio = new Audio(songs[currentplayed + 1000]);
+            document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
+            initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
         else if (currentplayed < 0) {
             if (currentplayed + 1000 == 0)
@@ -138,16 +194,21 @@ async function main() {
                 currentplayed--;
             audio = new Audio(songs[currentplayed + 1000]);
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed + 1000].querySelector(".info").textContent;
+            initiailtime();
+            audio.addEventListener("timeupdate", () => {
+                displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
+            });
         }
         else if (currentplayed == 0) {
+            initiailtime();
             playMusic(songs[songs.length - 1], songs.length - 1);
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[songs.length - 1].querySelector(".info").textContent;
         }
         else {
             document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed - 1].querySelector(".info").textContent;
             playMusic(songs[currentplayed - 1], currentplayed - 1);
+            initiailtime();
         }
     });
-
 }
 main();
