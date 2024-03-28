@@ -125,8 +125,8 @@ async function main() {
                               <div class="musiclist flex space">
                               <img src="images&logo/music.svg" alt="">
                               <div>
-                                <div style="overflow:hidden; max-width:12vw; height:17px;" class="info" id="${index++}">${music}</div>
-                                <div style="overflow:hidden; max-width:12vw; height:17px; class="name">${singer}</div>
+                                <div class="info" id="${index++}">${music}</div>
+                                <div  class="name">${singer}</div>
                               </div>
                               </div>
                               <div class="flex pointer library-play-now" style="gap:4px; align-items:center">

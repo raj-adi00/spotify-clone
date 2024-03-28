@@ -12,11 +12,13 @@
 .left {
     width: 25vw;
     transition: all 1s ease;
+    border: none !important;
 }
 
 .right {
     width: 75vw;
     position: relative;
+    border: none !important;
     /*  background-color: #1e1e1e; */
 }
 
@@ -157,7 +159,7 @@
 .spotify-cards {
     margin-top: 15px;
     flex-wrap: wrap;
-    max-height: 35vh;
+    max-height: 60vh;
     overflow-y: scroll;
     overflow-x: hidden;
     row-gap: 3rem;
@@ -209,6 +211,8 @@
     max-width: 210px;
     margin: 2px 15px;
     position: relative;
+    justify-content: center;
+    align-items: center;
 }
 
 .cards img {
@@ -239,6 +243,7 @@
     align-items: center;
     border-radius: 90px;
     height: 74px;
+    z-index: 1400;
 }
 
 .song-navigate {
@@ -296,12 +301,25 @@
     background-color: black;
     height: 100%;
 }
-.close{
+
+.close {
     position: absolute;
     top: 7px;
     right: 6px;
     display: none;
     cursor: pointer;
+}
+
+.name {
+    overflow: hidden;
+    max-width: 12vw;
+    height: 17px;
+}
+
+.info {
+    overflow: hidden;
+    max-width: 12vw;
+    height: 17px;
 }
 
 @media(max-width:1100px) {
@@ -319,6 +337,7 @@
 
     .playbar {
         width: 97vw;
+        min-height: 74px;
     }
 
     .hamburger {
@@ -326,6 +345,102 @@
     }
 
     .close {
-      display: block;
+        display: block;
+    }
+
+    .cards img {
+        width: 23vw;
+        margin: auto;
+    }
+
+    .cards {
+        width: 24vw;
+        height: 35vw;
+    }
+}
+
+@media(max-width:700px) {
+    .left {
+        width: 70%;
+        overflow: auto;
+    }
+
+    .playbar {
+        width: 95vw;
+        margin: 4px 0;
+    }
+
+    .abovebar {
+        margin: 3px 0;
+    }
+
+    .seekbar {
+        width: 80%;
+    }
+
+    .songname {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .cards {
+        width: 30vw;
+        height: 45vw;
+        min-width: 200px;
+        min-height: 250px;
+    }
+
+    .cards img {
+        width: 28vw;
+        min-width: 180px;
+    }
+}
+
+@media(max-width:500px) {
+    .name {
+        overflow: visible;
+        word-break: break-all;
+        height: auto;
+        max-width: none;
+    }
+
+    .info {
+        overflow: visible;
+        word-break: break-all;
+        height: auto;
+        max-width: none;
+    }
+
+    .songlist ul li {
+        height: auto;
+    }
+
+    .cards {
+        width: 50vw;
+        height: 55vw;
+        max-width: none;
+        justify-content: center;
+    }
+
+    .cards img {
+        width: 40vw;
+        height: 40vw;
+        max-width: none;
+    }
+
+    .spotify-cards {
+        justify-content: center;
+        row-gap: 1rem;
+    }
+
+    .playbar {
+        border-radius: 0;
+        width: 96vw;
+        height: 83px;
+    }
+
+    .abovebar {
+        flex-direction: column;
+        top: -6px;
     }
 }
