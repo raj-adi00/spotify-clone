@@ -88,6 +88,8 @@ const playMusic = (track, clicked) => {
 
 async function getsongs() {
     let a = await fetch("http://127.0.0.1:5500/song");
+    // let a=await fetch("https://github.com/raj-adi00/spotify-clone/tree/main/song");
+    console.log(a);
     let response = await a.text();
     // console.log(response);
     let div = document.createElement("div");
@@ -270,9 +272,15 @@ async function main() {
         let percent = ((e.clientX - document.querySelector(".seekbar").getBoundingClientRect().left) / (document.querySelector(".seekbar").getBoundingClientRect().right - document.querySelector(".seekbar").getBoundingClientRect().left));
         percent = percent * 100;
         percent = Math.trunc(percent);
-        audio.pause();
         audio.currentTime = (percent * audio.duration) / 100;
-        audio.play();
+        changecurrenttime(audio.currentTime);
+    });
+    document.querySelector(".hamburger").addEventListener("click", () => {
+        document.querySelector(".left").style.left = "0";
+    });
+   
+    document.querySelector(".close").addEventListener("click",()=>{
+     document.querySelector(".left").style.left="-100%";
     });
 }
 main();
