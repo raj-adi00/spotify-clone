@@ -112,7 +112,7 @@ const playMusic = (track, clicked) => {
 }
 
 async function getsongs(folder) {
-    let a = await fetch(`http://127.0.0.1:5500/song/${folder}`);
+    let a = await fetch(`https://raj-adi00.github.io/spotify-clone/song/${folder}`);
     // let a=await fetch("https://github.com/raj-adi00/spotify-clone/tree/main/song");
     console.log(a);
     let response = await a.text();
