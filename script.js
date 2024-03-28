@@ -282,5 +282,24 @@ async function main() {
     document.querySelector(".close").addEventListener("click",()=>{
      document.querySelector(".left").style.left="-100%";
     });
+    document.querySelector(".volume").addEventListener("change",(e)=>{
+    audio.volume=parseInt(e.target.value)/100;
+    });
+  
+     let cards=document.querySelectorAll(".cards");
+     for(let card of cards)
+     {
+        card.addEventListener("mouseenter",(e)=>{
+            console.log(e.target.children[1]);
+        e.target.children[1].style.opacity='1';
+        e.target.style.background="#443e3e";
+        });
+        card.addEventListener("mouseleave",(e)=>{
+            console.log(e.target.children[1]);
+        e.target.children[1].style.opacity='0';
+        e.target.style.background="#181818";
+           });
+        //    i++;
+     }
 }
 main();

@@ -213,8 +213,11 @@
     position: relative;
     justify-content: center;
     align-items: center;
+    transition: all 1s ease;
 }
-
+.cards:hover{
+    cursor: pointer;
+}
 .cards img {
     width: calc(16vw - 20px);
     min-width: 120px;
@@ -283,7 +286,7 @@
     height: 20px;
     color: white;
     position: absolute;
-    top: 20px;
+    top: 9px;
     justify-content: space-between;
     align-items: center;
     width: 90%;
@@ -321,7 +324,11 @@
     max-width: 12vw;
     height: 17px;
 }
-
+.volume{
+    width: 70%;
+    cursor: pointer;
+    accent-color: rgba(249, 244, 244, 0.355);
+}
 @media(max-width:1100px) {
     .left {
         position: fixed;
@@ -436,11 +443,17 @@
     .playbar {
         border-radius: 0;
         width: 96vw;
-        height: 83px;
+       min-height: 110px;
+    }
+    .song-navigate{
+        margin-top: 55px;
     }
 
     .abovebar {
         flex-direction: column;
         top: -6px;
+    }
+    .login{
+        width: 12vw;
     }
 }
