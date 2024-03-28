@@ -29,6 +29,31 @@ function songend() {
         })
     }
 }
+function crreatesonglist(songs, currentfolder) {
+    let songul = document.querySelector(".songlist").getElementsByTagName("ul")[0];
+    let index = 0;
+    for (let song of songs) {
+        song = song.split(`/${currentfolder}/`)[1];
+        // console.log(songs);
+        let music = song.split('(')[0];
+        let singer = song.split('(')[1];
+        singer = singer.split(')')[0];
+        music = music.replaceAll("%20", " ");
+        singer = singer.replaceAll("%20", " ");
+        songul.innerHTML += `<li class="flex librarysong" style="align-itmes:center; justify-content:space-between; background:#f8f8f87a; padding:5px">
+                      <div class="musiclist flex space">
+                      <img src="images&logo/music.svg" alt="">
+                      <div>
+                        <div class="info" id="${index++}">${music}</div>
+                        <div  class="name">${singer}</div>
+                      </div>
+                      </div>
+                      <div class="flex pointer library-play-now" style="gap:4px; align-items:center">
+                      <img src="images&logo/play.svg" style="padding:0 3px;" id="img${index - 1}">
+                      </div>
+                    </li>`;
+    }
+}
 function displaysongtime(formattedcurrenttime, formattedduration) {
     document.querySelector(".songtime").innerHTML = `${formattedcurrenttime}/${formattedduration}`;
 }
@@ -86,17 +111,17 @@ const playMusic = (track, clicked) => {
     }
 }
 
-async function getsongs() {
-    let a = await fetch("http://127.0.0.1:5500/song");
+async function getsongs(folder) {
+    let a = await fetch(`/song/${folder}`);
     // let a=await fetch("https://github.com/raj-adi00/spotify-clone/tree/main/song");
-    console.log(a);
+    // console.log(a);
     let response = await a.text();
     // console.log(response);
     let div = document.createElement("div");
     div.innerHTML = response;
     // console.log(div);
     let as = div.getElementsByTagName("a");
-    // console.log(as);
+    console.log(as);
     let songs = [];
     for (let index = 0; index < as.length; index++) {
         if (as[index].href.endsWith(".mp3") || as[index].href.endsWith(".MP3")) {
@@ -109,31 +134,12 @@ async function getsongs() {
 }
 let songs;
 async function main() {
-    songs = await getsongs();
+    songs = await getsongs("all");
+    let currentfolder = 'all';
+    let cardsall = document.querySelectorAll(".cards");
+    cardsall = Array.from(cardsall);
     // console.log(songs);
-    let songul = document.querySelector(".songlist").getElementsByTagName("ul")[0];
-    let index = 0;
-    for (let song of songs) {
-        song = song.split('/song/')[1];
-        // console.log(songs);
-        let music = song.split('(')[0];
-        let singer = song.split('(')[1];
-        singer = singer.split(')')[0];
-        music = music.replaceAll("%20", " ");
-        singer = singer.replaceAll("%20", " ");
-        songul.innerHTML += `<li class="flex librarysong" style="align-itmes:center; justify-content:space-between; background:#f8f8f87a; padding:5px">
-                              <div class="musiclist flex space">
-                              <img src="images&logo/music.svg" alt="">
-                              <div>
-                                <div class="info" id="${index++}">${music}</div>
-                                <div  class="name">${singer}</div>
-                              </div>
-                              </div>
-                              <div class="flex pointer library-play-now" style="gap:4px; align-items:center">
-                              <img src="images&logo/play.svg" style="padding:0 3px;" id="img${index - 1}">
-                              </div>
-                            </li>`;
-    }
+    crreatesonglist(songs, currentfolder);
     let songli = document.querySelectorAll(".songlist li");
     // console.log(songs);
     for (let music of songli) {
@@ -278,28 +284,48 @@ async function main() {
     document.querySelector(".hamburger").addEventListener("click", () => {
         document.querySelector(".left").style.left = "0";
     });
-   
-    document.querySelector(".close").addEventListener("click",()=>{
-     document.querySelector(".left").style.left="-100%";
+
+    document.querySelector(".close").addEventListener("click", () => {
+        document.querySelector(".left").style.left = "-100%";
     });
-    document.querySelector(".volume").addEventListener("change",(e)=>{
-    audio.volume=parseInt(e.target.value)/100;
+    document.querySelector(".volume").addEventListener("change", (e) => {
+        audio.volume = parseInt(e.target.value) / 100;
     });
-  
-     let cards=document.querySelectorAll(".cards");
-     for(let card of cards)
-     {
-        card.addEventListener("mouseenter",(e)=>{
+
+    let cards = document.querySelectorAll(".cards");
+    for (let card of cards) {
+        card.addEventListener("mouseenter", (e) => {
             console.log(e.target.children[1]);
-        e.target.children[1].style.opacity='1';
-        e.target.style.background="#443e3e";
+            e.target.children[1].style.opacity = '1';
+            e.target.style.background = "#443e3e";
         });
-        card.addEventListener("mouseleave",(e)=>{
+        card.addEventListener("mouseleave", (e) => {
             console.log(e.target.children[1]);
-        e.target.children[1].style.opacity='0';
-        e.target.style.background="#181818";
-           });
-        //    i++;
-     }
+            e.target.children[1].style.opacity = '0';
+            e.target.style.background = "#181818";
+        });
+    }
+
+    for (let card of cardsall) {
+        card.addEventListener("click", async e => {
+            console.log(e.currentTarget.dataset.folder);
+            currentfolder = `${e.currentTarget.dataset.folder}`;
+            songs = await getsongs(`${e.currentTarget.dataset.folder}`);
+            console.log(songs);
+            document.querySelector(".songlist ul").innerHTML = "";
+            crreatesonglist(songs, currentfolder);
+            songli = document.querySelectorAll(".songlist li");
+            // console.log(songs);
+            for (let music of songli) {
+                music.addEventListener("click", () => {
+                    let currentsong = music.querySelector(".info").innerText;
+                    // console.log(currentsong);
+                    document.querySelector(".songname").innerHTML = currentsong;
+                    // console.log(music.querySelector(".info").id);
+                    playMusic(songs[parseInt(music.querySelector(".info").id)], parseInt(music.querySelector(".info").id));
+                });
+            }
+        });
+    }
 }
 main();
