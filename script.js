@@ -8,7 +8,7 @@ function convertSecondsToMinutesAndSeconds(seconds) {
     var formattedTime = minutes + ":" + Math.floor(((remainingSeconds < 10 ? "0" : "") + remainingSeconds));
     return formattedTime;
 }
-function songend() {
+function songend(currentplayed) {
 
     if (audio.currentTime == audio.duration) {
         audio.pause();
@@ -22,12 +22,14 @@ function songend() {
         startfrombegin();
         initiailtime();
         document.getElementById(`img${currentplayed}`).setAttribute("src", "images&logo/pause.svg");
+        document.querySelector(".songname").innerHTML = document.querySelectorAll(".songlist li")[currentplayed].querySelector(".info").innerHTML;
         let clicked = currentplayed;
         audio.addEventListener("timeupdate", () => {
             moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
         })
     }
+    return currentplayed;
 }
 function crreatesonglist(songs, currentfolder) {
     let songul = document.querySelector(".songlist").getElementsByTagName("ul")[0];
@@ -64,7 +66,7 @@ function initiailtime() {
 }
 function moveseekbar(clicked) {
     let percent = (audio.currentTime / audio.duration) * 100;
-    console.log(percent);
+    // console.log(percent);
     if (currentplayed == clicked) {
         document.querySelector(".circle").style.left = `${percent < 99 ? percent : 99}%`;
     }
@@ -93,7 +95,7 @@ const playMusic = (track, clicked) => {
         audio.addEventListener("timeupdate", () => {
             moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
-            songend();
+            currentplayed=songend(currentplayed);
         });
     }
     else {
@@ -106,7 +108,7 @@ const playMusic = (track, clicked) => {
         audio.addEventListener("timeupdate", () => {
             moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
-            songend();
+            currentplayed=songend(currentplayed);
         });
     }
 }
@@ -162,7 +164,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+               currentplayed= songend(currentplayed);
             });
         }
         else if (currentplayed == undefined) {
@@ -176,7 +178,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(0);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+                currentplayed=songend(currentplayed);
             });
         }
         else {
@@ -188,7 +190,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar();
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+                currentplayed=songend(currentplayed);
             });
         }
     });
@@ -203,7 +205,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+                currentplayed=songend(currentplayed);
             });
         }
         else if (currentplayed < 0) {
@@ -219,7 +221,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+                currentplayed=songend(currentplayed);
             });
         }
         else if (currentplayed == songli.length - 1) {
@@ -243,7 +245,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar();
                 displaysongtime(convertSecondToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+                currentplayed=songend(currentplayed);
             });
         }
         else if (currentplayed < 0) {
@@ -257,7 +259,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar();
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                songend();
+               currentplayed= songend(currentplayed);
             });
         }
         else if (currentplayed == 0) {
@@ -295,12 +297,12 @@ async function main() {
     let cards = document.querySelectorAll(".cards");
     for (let card of cards) {
         card.addEventListener("mouseenter", (e) => {
-            console.log(e.target.children[1]);
+            // console.log(e.target.children[1]);
             e.target.children[1].style.opacity = '1';
             e.target.style.background = "#443e3e";
         });
         card.addEventListener("mouseleave", (e) => {
-            console.log(e.target.children[1]);
+            // console.log(e.target.children[1]);
             e.target.children[1].style.opacity = '0';
             e.target.style.background = "#181818";
         });
@@ -314,7 +316,14 @@ async function main() {
             console.log(songs);
             document.querySelector(".songlist ul").innerHTML = "";
             crreatesonglist(songs, currentfolder);
+            audio.pause();
+            startfrombegin();
+            document.getElementById("play").setAttribute("src", "images&logo/play.svg");
+            currentplayed = -1000;
+            audio = new Audio(songs[0]);
+            initiailtime();
             songli = document.querySelectorAll(".songlist li");
+            document.querySelector(".songname").innerHTML = songli[0].querySelector(".info").innerText;
             // console.log(songs);
             for (let music of songli) {
                 music.addEventListener("click", () => {
