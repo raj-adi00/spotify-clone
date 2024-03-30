@@ -114,8 +114,8 @@ const playMusic = (track, clicked) => {
 }
 
 async function getsongs(folder) {
-    // let a = await fetch(`http://127.0.0.1:5500/song/${folder}`);
-    let a=await fetch(`song/${folder}`);
+    let a = await fetch(`http://127.0.0.1:5500/song/${folder}`);
+    // let a=await fetch(`song/${folder}`);
     // console.log(a);
     // let a=await fetch("https://github.com/raj-adi00/spotify-clone/tree/main/song");
     // console.log(a);
@@ -341,6 +341,8 @@ async function main() {
 }
 main();
 let singer;
+// let abc=function(){
+//     fetch('http://127.0.0.1:5500/song/Arijitsingh/details.json').then((resp)=>{resp=resp.json();return resp}).then((val)=>{return val})};
 fetch(`http://127.0.0.1:5500/song/`)
     .then((res) => {
         return (res.text());
@@ -357,23 +359,38 @@ fetch(`http://127.0.0.1:5500/song/`)
             if (x.href.includes('/song/'))
                 singer.push(x.href.split('/song/')[1]);
         }
-        let musician = ["All songs", "Arijit singh", "Badshah", "Kishore Kumar", "KK", "Palak Muchhal", "Shreya Ghoshal"];
-        let photo=["allsong.svg","Arijitsingh.jpg","Badshah.jpg","kishorekumar.jpg","KK.jpg","Palakmuchhal.jpg","Shreyaghoshal.jpg"];
+        // let musician = ["All songs", "Arijit singh", "Badshah", "Kishore Kumar", "KK", "Palak Muchhal", "Shreya Ghoshal"];
+        // let photo=["allsong.svg","Arijitsingh.jpg","Badshah.jpg","kishorekumar.jpg","KK.jpg","Palakmuchhal.jpg","Shreyaghoshal.jpg"];
         let index = 0;
         console.log(singer);
         for (let sing of singer) {
-            let images="images&logo/"+photo[index];
+            // let images="images&logo/"+photo[index];
             document.getElementsByClassName("spotify-cards")[0].innerHTML += ` <div class="cards" data-folder="${sing}">
-        <img src='${images}' alt="" class="performer">
+        <img src='' alt="" class="performer">
         <div class="play-button flex">
             <img src="images&logo/play.svg" alt="">
         </div>
-        <h3 style="font-weight:900">${musician[index]}</h3>
-        <p style=" font-weight:400">Check out ${musician[index]}'s collection</p>
-    </div>`
+        <h3 style="font-weight:900" class="singername"></h3>
+        <p style=" font-weight:400" class="about"></p>
+        </div>`
             index++;
         }
     })
+    .then(()=>{
+        setsingername();
+    })
     .catch(() => {
-        document.getElementsByClassName(".left")[0].innerHTML = "REFRESH THE PAGE";
+        // document.getElementsByClassName(".left")[0].innerHTML = "REFRESH THE PAGE";
     });
+    async function setsingername()
+    {
+        let sname=document.querySelectorAll(".cards");
+        for(let x of sname)
+        {
+            x.querySelector(".singername").innerHTML=(await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).singer;
+            x.querySelector(".about").innerHTML=(await(await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).description;
+            // console.log((await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo);
+            let image="images&logo/"+(await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo;
+            x.querySelector(".performer").setAttribute("src",`${image}`)
+        }
+    }
