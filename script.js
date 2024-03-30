@@ -95,7 +95,7 @@ const playMusic = (track, clicked) => {
         audio.addEventListener("timeupdate", () => {
             moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
-            currentplayed=songend(currentplayed);
+            currentplayed = songend(currentplayed);
         });
     }
     else {
@@ -108,22 +108,22 @@ const playMusic = (track, clicked) => {
         audio.addEventListener("timeupdate", () => {
             moveseekbar(clicked);
             document.querySelector(".songtime").innerHTML = `${convertSecondsToMinutesAndSeconds(audio.currentTime)}/${convertSecondsToMinutesAndSeconds(audio.duration)}`;
-            currentplayed=songend(currentplayed);
+            currentplayed = songend(currentplayed);
         });
     }
 }
 
 async function getsongs(folder) {
-    let a = await fetch(`https://raj-adi00.github.io/spotify-clone/song/${folder}?raw=true`);
+    let a = await fetch(`http://127.0.0.1:5500/song/${folder}`);
     // let a=await fetch("https://github.com/raj-adi00/spotify-clone/tree/main/song");
-    console.log(a);
+    // console.log(a);
     let response = await a.text();
     // console.log(response);
     let div = document.createElement("div");
     div.innerHTML = response;
     // console.log(div);
     let as = div.getElementsByTagName("a");
-    console.log(as);
+    // console.log(as);
     let songs = [];
     for (let index = 0; index < as.length; index++) {
         if (as[index].href.endsWith(".mp3") || as[index].href.endsWith(".MP3")) {
@@ -164,7 +164,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-               currentplayed= songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
         else if (currentplayed == undefined) {
@@ -178,7 +178,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(0);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                currentplayed=songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
         else {
@@ -190,7 +190,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar();
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                currentplayed=songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
     });
@@ -205,7 +205,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                currentplayed=songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
         else if (currentplayed < 0) {
@@ -221,7 +221,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar(clicked);
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                currentplayed=songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
         else if (currentplayed == songli.length - 1) {
@@ -245,7 +245,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar();
                 displaysongtime(convertSecondToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-                currentplayed=songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
         else if (currentplayed < 0) {
@@ -259,7 +259,7 @@ async function main() {
             audio.addEventListener("timeupdate", () => {
                 moveseekbar();
                 displaysongtime(convertSecondsToMinutesAndSeconds(audio.currentTime), convertSecondsToMinutesAndSeconds(audio.duration));
-               currentplayed= songend(currentplayed);
+                currentplayed = songend(currentplayed);
             });
         }
         else if (currentplayed == 0) {
@@ -338,3 +338,40 @@ async function main() {
     }
 }
 main();
+let singer;
+fetch(`http://127.0.0.1:5500/song/`)
+    .then((res) => {
+        return (res.text());
+    })
+    .then((val) => {
+        // console.log(val);
+        let tag = document.createElement("div");
+        tag.innerHTML = val;
+        // console.log(tag);
+        let allas = tag.getElementsByTagName("a");
+        // console.log(allas);
+        singer = [];
+        for (let x of allas) {
+            if (x.href.includes('/song/'))
+                singer.push(x.href.split('/song/')[1]);
+        }
+        let musician = ["All songs", "Arijit singh", "Badshah", "Kishore Kumar", "KK", "Palak Muchhal", "Shreya Ghoshal"];
+        let photo=["allsong.svg","Arijitsingh.jpg","Badshah.jpg","kishorekumar.jpg","KK.jpg","Palakmuchhal.jpg","Shreyaghoshal.jpg"];
+        let index = 0;
+        console.log(singer);
+        for (let sing of singer) {
+            let images="images&logo/"+photo[index];
+            document.getElementsByClassName("spotify-cards")[0].innerHTML += ` <div class="cards" data-folder="${sing}">
+        <img src='${images}' alt="" class="performer">
+        <div class="play-button flex">
+            <img src="images&logo/play.svg" alt="">
+        </div>
+        <h3 style="font-weight:900">${musician[index]}</h3>
+        <p style=" font-weight:400">Check out ${musician[index]}'s collection</p>
+    </div>`
+            index++;
+        }
+    })
+    .catch(() => {
+        document.getElementsByClassName(".left")[0].innerHTML = "REFRESH THE PAGE";
+    });

@@ -457,3 +457,12 @@
         width: 12vw;
     }
 }
+@media (min-width:900px) and (max-width:1100px)
+{
+    .cards{
+        height: 25vw;
+    }
+}
+.performer{
+   height: 180px;
+}
