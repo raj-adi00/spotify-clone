@@ -19,7 +19,14 @@
                 <img src="images&logo/logo.svg" alt="SPOTIFY m3">
                 <ul class="tools">
                     <li class="flex m3"><img src="images&logo/home.svg" alt="HOME">HOME</li>
-                    <li class="flex m3"><img src="images&logo/search.svg" alt="SEARCH">SEARCH</li>
+                    <label for="searchbar">
+                        <li class="flex m3 search"><img src="images&logo/search.svg" alt="SEARCH">SEARCH</li>
+                    </label>
+                    <input type="text" id='searchbar'
+                        style="background-color: black; color: white; height: 25px; border-radius: 5px; padding: 2px; width: 60%; font-family: cursive; font-weight: 400;"
+                        placeholder="search">
+                        <div class="result" style="display: flex;flex-direction: column; position: absolute; color: white; background-color: black; z-index: 500;"> 
+                        </div>
                 </ul>
             </div>
             <div class="library rounded m3 bg-grey">
