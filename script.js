@@ -859,13 +859,15 @@ fetch(`http://127.0.0.1:5500/song/`)
     .catch(() => {
         // document.getElementsByClassName(".left")[0].innerHTML = "REFRESH THE PAGE";
     });
-async function setsingername() {
-    let sname = document.querySelectorAll(".cards");
-    for (let x of sname) {
-        x.querySelector(".singername").innerHTML = (await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).singer;
-        x.querySelector(".about").innerHTML = (await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).description;
-        // console.log((await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo);
-        let image = "images&logo/" + (await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo;
-        x.querySelector(".performer").setAttribute("src", `${image}`)
+    async function setsingername()
+    {
+        let sname=document.querySelectorAll(".cards");
+        for(let x of sname)
+        {
+            x.querySelector(".singername").innerHTML=(await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).singer;
+            x.querySelector(".about").innerHTML=(await(await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).description;
+            // console.log((await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo);
+            let image="images&logo/"+(await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo;
+            x.querySelector(".performer").setAttribute("src",`${image}`)
+        }
     }
-}
