@@ -421,7 +421,7 @@
 //     }
 // }
 
-
+let currentlyavailablemusic = [];
 function convertSecondsToMinutesAndSeconds(seconds) {
     var minutes = Math.floor(seconds / 60);
     var remainingSeconds = seconds % 60;
@@ -456,15 +456,18 @@ function songend(currentplayed) {
     return currentplayed;
 }
 function crreatesonglist(songs, currentfolder) {
+    currentlyavailablemusic = [];
     let songul = document.querySelector(".songlist").getElementsByTagName("ul")[0];
     let index = 0;
     for (let song of songs) {
         song = song.split(`/${currentfolder}/`)[1];
         // console.log(songs);
         let music = song.split('(')[0];
+        // console.log(music)
         let singer = song.split('(')[1];
         singer = singer.split(')')[0];
         music = music.replaceAll("%20", " ");
+        currentlyavailablemusic.push(music);
         singer = singer.replaceAll("%20", " ");
         songul.innerHTML += `<li class="flex librarysong" style="align-itmes:center; justify-content:space-between; background:#f8f8f87a; padding:5px">
                       <div class="musiclist flex space">
@@ -573,13 +576,63 @@ async function main() {
     // console.log(songs);
     for (let music of songli) {
         music.addEventListener("click", () => {
+            // console.log(music)
             let currentsong = music.querySelector(".info").innerText;
+            // console.log(currentsong)
             // console.log(currentsong);
             document.querySelector(".songname").innerHTML = currentsong;
             // console.log(music.querySelector(".info").id);
             playMusic(songs[parseInt(music.querySelector(".info").id)], parseInt(music.querySelector(".info").id));
         });
     }
+    // SEARCH BUTTON FUNCTIONALITY
+    // document.querySelector("#searchbar").addEventListener("input", (e) => {
+    //     document.querySelector(".result").innerHTML = "";
+    //     let enter = e.target.value;
+    //     let index=0;
+    //     // console.log(currentlyavailablemusic)
+    //     currentlyavailablemusic.map((val) => {
+    //         if (val.toUpperCase().includes(enter.toUpperCase())) {
+    //             // console.log(val);
+    //             document.querySelector(".result").innerHTML += `<li style="border-bottom:1px solid grey; margin:5px; min-width:90%; overflow:hidden" class=${index}>${val}</li>`
+    //         }
+    //         index++;
+    //     })
+    // })
+    function move() {
+
+    }
+    document.querySelector("#searchbar").addEventListener("input", (e) => {
+        document.querySelector(".result").innerHTML = "";
+        let enter = e.target.value;
+        let allsong = document.querySelectorAll(".info");
+        // console.log(allsong[0].innerHTML);
+        allsong = Array.from(allsong)
+        // console.log(allsong)
+        allsong.forEach((val) => {
+            if ((val.innerHTML).toUpperCase().includes(enter.toUpperCase()))
+                document.querySelector(".result").innerHTML += `<li style="border-bottom:1px solid grey; margin:5px; width:90%; overflow:hidden; cursor:pointer" class="searchoption" id="search${val.id}">${val.innerHTML}</li>`
+        })
+        repeat()
+        function repeat()
+        {
+            let allsearchoption = document.querySelectorAll(".searchoption");
+            allsearchoption.forEach((ele) => {
+                // console.log(ele.id);
+                // document.querySelector("library").addEventListener("click",()=>{console.log(1)})
+                ele.addEventListener("mousedown",()=>{
+                    let songnumber=Number(ele.id.substring(6));
+                     playMusic(songs[songnumber],songnumber);                    
+                })
+            })
+        }
+        //  console.log(allsearchoption);
+        document.querySelector("#searchbar").addEventListener("blur", () => {
+            // console.log(1);
+            document.querySelector(".result").innerHTML = "";
+        })
+        // document.querySelector("#searchbar").addEventListener("focus",()=>{})
+    })
     document.getElementById("play").addEventListener("click", () => {
         if (audio != undefined && currentplayed < 0) {
             audio.play();
@@ -621,7 +674,6 @@ async function main() {
             });
         }
     });
-
     document.getElementById("next").addEventListener("click", () => {
         if (currentplayed == undefined) {
             currentplayed = -1000;
@@ -787,7 +839,7 @@ fetch(`http://127.0.0.1:5500/song/`)
         // let musician = ["All songs", "Arijit singh", "Badshah", "Kishore Kumar", "KK", "Palak Muchhal", "Shreya Ghoshal"];
         // let photo=["allsong.svg","Arijitsingh.jpg","Badshah.jpg","kishorekumar.jpg","KK.jpg","Palakmuchhal.jpg","Shreyaghoshal.jpg"];
         let index = 0;
-        console.log(singer);
+        // console.log(singer);
         for (let sing of singer) {
             // let images="images&logo/"+photo[index];
             document.getElementsByClassName("spotify-cards")[0].innerHTML += ` <div class="cards" data-folder="${sing}">
@@ -801,21 +853,19 @@ fetch(`http://127.0.0.1:5500/song/`)
             index++;
         }
     })
-    .then(()=>{
+    .then(() => {
         setsingername();
     })
     .catch(() => {
         // document.getElementsByClassName(".left")[0].innerHTML = "REFRESH THE PAGE";
     });
-    async function setsingername()
-    {
-        let sname=document.querySelectorAll(".cards");
-        for(let x of sname)
-        {
-            x.querySelector(".singername").innerHTML=(await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).singer;
-            x.querySelector(".about").innerHTML=(await(await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).description;
-            // console.log((await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo);
-            let image="images&logo/"+(await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo;
-            x.querySelector(".performer").setAttribute("src",`${image}`)
-        }
+async function setsingername() {
+    let sname = document.querySelectorAll(".cards");
+    for (let x of sname) {
+        x.querySelector(".singername").innerHTML = (await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).singer;
+        x.querySelector(".about").innerHTML = (await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).description;
+        // console.log((await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo);
+        let image = "images&logo/" + (await (await fetch(`http://127.0.0.1:5500/song/${x.dataset.folder}/details.json`)).json()).photo;
+        x.querySelector(".performer").setAttribute("src", `${image}`)
     }
+}
